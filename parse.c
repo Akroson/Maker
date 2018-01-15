@@ -77,7 +77,6 @@ void parse_dir(char *path, struct folder **fold)
 					sizeof(struct file*) * (*fold)->files_count);
 				if (!(*fold)->files) exit(1);
 				
-
 				uint16_t num_file = (*fold)->files_count - 1;
 				uint16_t name_len = d_len - ++j;
 				stat(dir->d_name, &fileStat);
@@ -90,8 +89,10 @@ void parse_dir(char *path, struct folder **fold)
 				(*fold)->files[num_file]->o_file = strcmp(ext, "o") ? false : true;
 				(*fold)->files[num_file]->cmp_len = name_len;
 			}
-		} else if (dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0 &&
-			strcmp(dir->d_name, ".git")) {
+		} else if (dir->d_type == DT_DIR && !(!strcmp(dir->d_name, ".") || !strcmp(dir->d_name, "..") || 
+				!strcmp(dir->d_name, ".git"))
+			) {
+
 			(*fold)->folders_count++;
 			(*fold)->folders = (struct folder **)realloc((*fold)->folders,
 				sizeof(struct folder*) * (*fold)->folders_count);
